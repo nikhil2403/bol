@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@ControllerAdvice
+ @ControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(GameException.class)
     public ResponseEntity<Object> handleException(
