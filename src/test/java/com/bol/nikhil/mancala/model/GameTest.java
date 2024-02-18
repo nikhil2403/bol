@@ -32,11 +32,11 @@ class GameTest {
         //register a user
         game.registerUser(Player.builder().userId(1L).build());
         //check if the player is active
-        assertEquals(Player.builder().userId(1L).build(), game.getPlayerActive());
+        assertEquals(1L, game.getPlayerActive().getUserId());
        //register another user
         game.registerUser(Player.builder().userId(2L).build());
         //check if another player is waiting
-        assertEquals(Player.builder().userId(2L).build(), game.getWaitingPlayer());
+        assertEquals(2L, game.getWaitingPlayer().getUserId());
 
         //throw exception if the game is already started
         assertThrows(GameException.class, () -> game.registerUser(Player.builder().userId(3L).build()));

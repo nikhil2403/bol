@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,13 +14,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Builder
 @Repository
 public class GameRepository  {
 
     Map<Long,Game> gameRepository;
+
+    //constructor
+    @Autowired
+    public GameRepository(Map<Long, Game> gameRepository) {
+        this.gameRepository = gameRepository;
+    }
 
     public Game save(Game game) {
         if (game == null) {

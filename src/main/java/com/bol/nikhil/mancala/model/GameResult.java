@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 public class GameResult {
     @Getter(AccessLevel.NONE)
     private Game game;
-    private PlayerTurn winningPlayerTurn;
     private int winningScore;
     private int losingScore;
     private Long winningPlayerId;
@@ -21,7 +20,6 @@ public class GameResult {
    public  GameResult(Game game){
         this.game = game;
         this.gameStatus = game.getGameStatus();
-        this.winningPlayerTurn = getWinningPlayerTurn();
         this.winningScore = getWinningScore();
         this.losingScore = getLosingScore();
         this.winningPlayerId = getWinningPlayerId();

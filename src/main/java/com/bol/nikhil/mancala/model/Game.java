@@ -1,16 +1,13 @@
 package com.bol.nikhil.mancala.model;
 
 import com.bol.nikhil.mancala.exception.GameException;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static com.bol.nikhil.mancala.util.Constants.MAX_PITS;
+import static com.bol.nikhil.mancala.util.Constants.*;
 
 @Data
 @NoArgsConstructor
@@ -35,7 +32,7 @@ public class Game {
     private List<Integer> housePits ;
 
     private GameStatus gameStatus;
-
+    @Getter(AccessLevel.NONE)
     private ReentrantLock lock ;
 
     /**
@@ -43,7 +40,7 @@ public class Game {
      * Set the house pits to the middle and the end of the pits.
      * Set the pits for the game.
      * Set the playerActive and playerWaiting to null.
-     * Set the gameStatus to INITIALISED.
+     * Set the gameStatus to INITIALIZED.
      *
      */
     public void initialize(){
@@ -52,6 +49,7 @@ public class Game {
         setPits();
         playerActive = null;
         gameStatus = GameStatus.INITIALIZED;
+        lock = new ReentrantLock();
     }
 
     /**
@@ -73,7 +71,8 @@ public class Game {
             playerTwo = player;
             player.setPlayerTurn(PlayerTurn.PLAYER_TWO);
         }  else {
-            throw new GameException(HttpStatus.BAD_REQUEST.value() ,"Both players are already registered. Please wait or join another game.");
+
+            throw new GameException(HttpStatus.BAD_REQUEST.value() ,BOTH_PLAYERS_ALREADY_REGISTERED);
         }
     }
 
@@ -84,9 +83,9 @@ public class Game {
      * @throws GameException
      * @return void
      */
-    public void startGame(){
+    public synchronized  void startGame(){
         if(playerOne == null || playerTwo == null){
-            throw new GameException(HttpStatus.BAD_REQUEST.value() ,"Both players are not registered. Please wait or join another game.");
+            throw new GameException(HttpStatus.BAD_REQUEST.value() ,BOTH_PLAYERS_REQUIRED);
         }
         gameStatus = GameStatus.IN_PROGRESS;
     }
@@ -125,20 +124,20 @@ public class Game {
     public void makeMove(int pitId) {
         //throw exception if pitId is not valid
         if(pitId < 0 || pitId >= MAX_PITS){
-            throw new GameException(HttpStatus.BAD_REQUEST.value() ,"Invalid pitId. Please enter valid pitId");
+            throw new GameException(HttpStatus.BAD_REQUEST.value() ,ILLEGAL_PIT);
         }
 
         Pit pit = pits.get(pitId);
         if(pit.isOtherHousePit()){
-            throw new GameException(HttpStatus.BAD_REQUEST.value() ,"Invalid move. Cannot move from other player's house");
+            throw new GameException(HttpStatus.BAD_REQUEST.value() ,HOUSE_PIT_ILLEGAL_MOVE);
         }
         if(pit.isOwnHousePit()){
-            throw new GameException(HttpStatus.BAD_REQUEST.value() ,"Invalid move. Cannot move from own house");
+            throw new GameException(HttpStatus.BAD_REQUEST.value() ,OTHER_HOUSE_PIT_ILLEGAL_MOVE);
         }
 
         // throw exception if  pit is not active player's pit
         if(!isActivePlayerPit(pit)){
-            throw new GameException(HttpStatus.BAD_REQUEST.value() ,"Invalid move. Not active player's pit");
+            throw new GameException(HttpStatus.BAD_REQUEST.value() ,NOT_ACTIVE_PLAYER_TURN);
         }
 
         //lock the game to avoid concurrent moves.
@@ -146,7 +145,7 @@ public class Game {
             lock.lock();
             int stoneCount = pit.getStoneCount();
             if (stoneCount == 0) {
-                throw new GameException(HttpStatus.BAD_REQUEST.value(), "No stones present in pit. Please select another pit");
+                throw new GameException(HttpStatus.BAD_REQUEST.value(),EMPTY_PIT);
             }
 
             pit.setStoneCount(0);
@@ -168,7 +167,7 @@ public class Game {
             }
             updateScores();
             checkIsGameOver();
-            if (playerActive.getPlayerTurn().getHousePit() != pitId) {
+            if (playerActive.getPlayerTurn().getHousePit() != nextPit) {
                 setOtherPlayerActive();
             }
         }finally {
@@ -246,7 +245,7 @@ public class Game {
 
         Pit pit = pits.get(pitId);
         if(pit.getStoneCount() == 1){
-            if(isActivePlayerPit(pit)){
+            if(isActivePlayerPit(pit) && ! housePits.contains(pitId)){
                 Pit oppositePit = pits.get(MAX_PITS - pitId -2 );
                 if(oppositePit.getStoneCount() > 0){
                     Pit housePit = pits.get(playerActive.getPlayerTurn().getHousePit());
@@ -296,11 +295,11 @@ public class Game {
      * @return
      */
     public boolean isPlayerTurn(User user) {
-       return getPlayerActive().getUserId().equals(user.getId());
+       return playerActive != null && playerActive.getUserId().equals(user.getId());
     }
 
 
     public Player getWaitingPlayer() {
-        return playerActive.equals(playerOne) ? playerTwo : playerOne;
+        return playerActive == null? null : playerActive.equals(playerOne) ? playerTwo : playerOne;
     }
 }

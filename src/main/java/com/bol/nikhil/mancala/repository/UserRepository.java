@@ -6,17 +6,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 
 import java.util.Map;
 import java.util.Optional;
 
-@AllArgsConstructor
+
 @NoArgsConstructor
 @Data
 @Builder
+@Repository
 public class UserRepository  {
     Map<Long,User> userRepository;
+
+    //constructor
+    @Autowired
+    public UserRepository(Map<Long, User> userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * Save user to repository and return the saved user .

@@ -4,9 +4,10 @@ import com.bol.nikhil.mancala.model.User;
 import com.bol.nikhil.mancala.model.UserStats;
 import com.bol.nikhil.mancala.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class UserServiceImpl implements UserService {
 
     UserRepository userRepository;
