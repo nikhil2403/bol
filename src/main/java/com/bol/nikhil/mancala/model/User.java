@@ -13,10 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-@Entity
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
     private String name;
 

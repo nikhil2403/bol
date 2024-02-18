@@ -4,16 +4,21 @@ import com.bol.nikhil.mancala.model.User;
 import com.bol.nikhil.mancala.model.UserStats;
 import com.bol.nikhil.mancala.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
-    @Autowired
+
     UserRepository userRepository;
+
+    //constructor create
+    @Autowired
+    public UserServiceImpl( UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
     @Override
-    public User createUser(Long userId) {
-        return userRepository.save(User.builder().id(userId).build());
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.bol.nikhil.mancala.model;
 
 import com.bol.nikhil.mancala.util.Constants;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,14 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-public class Pit implements Comparable<Pit> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
+public class Pit  {
+
     private Integer index;
     private int stoneCount;
-    private PlayerTurn playerTurn;
+    private PlayerTurn playerOwningThisPit;
 
 
     public void setStoneCount(int stoneCount) {
@@ -26,7 +23,7 @@ public class Pit implements Comparable<Pit> {
     }
 
     public boolean isOwnHousePit(){
-        return  this.index == playerTurn.getHousePit() ;
+        return  this.index == playerOwningThisPit.getHousePit() ;
     }
 
 
@@ -36,19 +33,9 @@ public class Pit implements Comparable<Pit> {
      *
      */
     public boolean isOtherHousePit(){
-        return PlayerTurn.PLAYER_TWO.equals(playerTurn) && this.index == PlayerTurn.PLAYER_ONE.getHousePit()
-                || PlayerTurn.PLAYER_ONE.equals(playerTurn) && this.index == PlayerTurn.PLAYER_TWO.getHousePit();
+        return PlayerTurn.PLAYER_TWO.equals(playerOwningThisPit) && this.index == PlayerTurn.PLAYER_ONE.getHousePit()
+                || PlayerTurn.PLAYER_ONE.equals(playerOwningThisPit) && this.index == PlayerTurn.PLAYER_TWO.getHousePit();
     }
 
 
-    public boolean isActivePlayerPit(){
-        return  getPlayerTurn().housePit == (Constants.MAX_PITS - 1) / 2 && (index < getPlayerTurn().housePit && index > 0)
-                || getPlayerTurn().housePit == Constants.MAX_PITS-1 && (index < getPlayerTurn().housePit && index > (Constants.MAX_PITS - 1) / 2);
-
-    }
-
-    @Override
-    public int compareTo(Pit pit) {
-        return this.getIndex().compareTo(pit.getIndex());
-    }
 }

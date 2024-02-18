@@ -1,10 +1,40 @@
 package com.bol.nikhil.mancala.repository;
 
 import com.bol.nikhil.mancala.model.Game;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface GameRepository extends CrudRepository<Game,Long> {
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
+@Repository
+public class GameRepository  {
+
+    Map<Long,Game> gameRepository;
+
+    public Game save(Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("Game cannot be null");
+        }
+        if (game.getId() == null) {
+            //set a random id
+            game.setId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+        }
+        gameRepository.putIfAbsent(game.getId(),game);
+        return game;
+    }
+
+    public <T> Optional<Game> findById(Long gameId) {
+        return Optional.ofNullable(gameRepository.get(gameId));
+
+    }
 }

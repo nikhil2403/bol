@@ -6,7 +6,7 @@ import com.bol.nikhil.mancala.model.UserStats;
 import java.util.Optional;
 
 public interface UserService {
-    User createUser(Long userId);
+    User createUser(User user);
     Optional<User> getUser(Long userId);
 
    UserStats getUserStats(Long userId);

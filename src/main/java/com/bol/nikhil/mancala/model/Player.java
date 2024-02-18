@@ -12,13 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
-@Embeddable
 public class Player {
 
     private Long userId;
 
     private int score;
-    @Enumerated(EnumType.STRING)
     private PlayerTurn playerTurn;
 
 

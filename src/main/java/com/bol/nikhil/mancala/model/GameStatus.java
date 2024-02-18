@@ -1,7 +1,7 @@
 package com.bol.nikhil.mancala.model;
 
 public enum GameStatus {
-    INITIALISED,
+    INITIALIZED,
     IN_PROGRESS,
 
     DRAW,

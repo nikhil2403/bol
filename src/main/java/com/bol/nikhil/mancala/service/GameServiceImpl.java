@@ -6,11 +6,25 @@ import com.bol.nikhil.mancala.model.GameResult;
 import com.bol.nikhil.mancala.model.Player;
 import com.bol.nikhil.mancala.model.User;
 import com.bol.nikhil.mancala.repository.GameRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
+@Service
 public class GameServiceImpl implements GameService {
+
     GameRepository gameRepository;
+
     UserService userService;
+
+    //constructor create
+    @Autowired
+    public GameServiceImpl(GameRepository gameRepository, UserService userService) {
+        this.gameRepository = gameRepository;
+        this.userService = userService;
+    }
 
 
     @Override
