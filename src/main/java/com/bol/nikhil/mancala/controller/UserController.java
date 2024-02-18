@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * User Controller
  * This class is responsible for handling all the user related requests
@@ -49,6 +51,16 @@ public class UserController {
     public User getUser(@PathVariable final Long userId){
         log.info("Entering get user with userId : %s",userId);
         return userService.getUser(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    /**
+     * Get All Users
+     */
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<User> getAllUsers(){
+        log.info("Entering get all users");
+        return userService.getAllUsers();
     }
 
 }

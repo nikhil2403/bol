@@ -3,6 +3,7 @@ package com.bol.nikhil.mancala.service;
 import com.bol.nikhil.mancala.model.User;
 import com.bol.nikhil.mancala.model.UserStats;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -11,4 +12,5 @@ public interface UserService {
 
    UserStats getUserStats(Long userId);
 
+    List<User> getAllUsers();
 }

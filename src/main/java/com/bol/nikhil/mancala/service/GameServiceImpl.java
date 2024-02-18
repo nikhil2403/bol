@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 
 import static com.bol.nikhil.mancala.util.Constants.*;
 
@@ -76,6 +77,11 @@ public class GameServiceImpl implements GameService {
         Player player = Player.builder().userId(user.getId()).build();
         game.registerUser(player);
         return gameRepository.save(game);
+    }
+
+    @Override
+    public List<Game> getAllGames() {
+        return gameRepository.findAll();
     }
 
 

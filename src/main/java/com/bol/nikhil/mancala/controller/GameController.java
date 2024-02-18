@@ -8,8 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-import java.util.LinkedHashMap;
+
 
 
 /**
@@ -73,6 +74,15 @@ public class GameController {
         log.info("Entering getGameStatus with gameId : %s",gameId);
         return gameService.getGame(gameId);
     }
+
+    //get all games
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Game> getAllGames(){
+        log.info("Entering getAllGames");
+        return gameService.getAllGames();
+    }
+
 
 
     /**

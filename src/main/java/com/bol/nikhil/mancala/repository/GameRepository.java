@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,4 +44,9 @@ public class GameRepository  {
         return Optional.ofNullable(gameRepository.get(gameId));
 
     }
+
+    public List<Game> findAll() {
+        return (List<Game>) gameRepository.values();
+    }
+
 }

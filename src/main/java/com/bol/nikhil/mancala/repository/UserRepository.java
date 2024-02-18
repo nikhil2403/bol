@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -58,5 +59,10 @@ public class UserRepository  {
 
         return Optional.ofNullable(userRepository.get(userId));
 
+    }
+
+
+    public List<User> findAll() {
+        return (List<User>) userRepository.values();
     }
 }
