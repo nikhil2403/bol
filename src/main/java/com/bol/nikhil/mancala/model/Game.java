@@ -44,12 +44,19 @@ public class Game {
      *
      */
     public void initialize(){
+        checkGameInInitializedState();
         housePits = Arrays.asList((MAX_PITS-1)/2, MAX_PITS-1);
         pits = new ArrayList<>(MAX_PITS);
         setPits();
         playerActive = null;
         gameStatus = GameStatus.INITIALIZED;
         lock = new ReentrantLock();
+    }
+
+    private void checkGameInInitializedState() {
+        if(gameStatus != null && gameStatus != GameStatus.INITIALIZED){
+            throw new GameException(HttpStatus.BAD_REQUEST.value() ,GAME_ALREADY_STARTED);
+        }
     }
 
     /**
@@ -63,6 +70,7 @@ public class Game {
      *
      */
     public void registerUser(Player player){
+        checkGameInInitializedState();
         if(playerOne == null){
             playerActive = player;
             playerOne = player;
@@ -84,6 +92,7 @@ public class Game {
      * @return void
      */
     public synchronized  void startGame(){
+        checkGameInInitializedState();
         if(playerOne == null || playerTwo == null){
             throw new GameException(HttpStatus.BAD_REQUEST.value() ,BOTH_PLAYERS_REQUIRED);
         }
@@ -122,6 +131,7 @@ public class Game {
 
 
     public void makeMove(int pitId) {
+        checkGameInRunningState();
         //throw exception if pitId is not valid
         if(pitId < 0 || pitId >= MAX_PITS){
             throw new GameException(HttpStatus.BAD_REQUEST.value() ,ILLEGAL_PIT);
@@ -172,6 +182,12 @@ public class Game {
             }
         }finally {
             lock.unlock();
+        }
+    }
+
+    private void checkGameInRunningState() {
+        if( gameStatus==null || gameStatus != GameStatus.IN_PROGRESS){
+            throw new GameException(HttpStatus.BAD_REQUEST.value() ,GAME_NOT_IN_RUNNING_STATE);
         }
     }
 

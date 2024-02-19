@@ -20,6 +20,8 @@ public class Constants {
     public static final String OTHER_HOUSE_PIT_ILLEGAL_MOVE = "Other Player's House pit cannot be selected";
 
     public static final String GAME_ALREADY_STARTED = "Game already started";
+    //game not in running state
+    public static final String GAME_NOT_IN_RUNNING_STATE = "Game not in running state";
 
     public static final String ILLEGAL_MOVE = "Invalid move. Please wait for your turn";
 
